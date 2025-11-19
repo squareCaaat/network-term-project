@@ -1,7 +1,7 @@
 ---
-name: "[Feat] 기능명"
+name: Feature
 about: 새로운 기능 추가
-title: ''
+title: "[Feat] 기능명"
 labels: enhancement
 assignees: squareCaaat
 
