@@ -1,2 +1,5 @@
 .venv
 .docs
+__pycache__
+oplogs/*
+snapshots/*
