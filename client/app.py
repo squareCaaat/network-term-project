@@ -182,7 +182,7 @@ def apply_patch_to_text(content: str, patch: Dict[str, Any]) -> str:
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Collab Note - PyQt Client (Template)")
+        self.setWindowTitle("CollaMo")
         self.resize(900, 600)
 
         self.worker = NetWorker()
