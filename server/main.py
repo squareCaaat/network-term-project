@@ -71,16 +71,26 @@ def run_server(args: argparse.Namespace) -> None:
         server_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         server_sock.bind((args.host, args.port))
         server_sock.listen(args.backlog)
+        server_sock.settimeout(1.0)
         logging.info("CollabServer listening on %s:%s", args.host, args.port)
 
+        stop_event = threading.Event()
         try:
-            while True:
-                conn, addr = server_sock.accept()
+            while not stop_event.is_set():
+                try:
+                    conn, addr = server_sock.accept()
+                except socket.timeout:
+                    continue
+                except OSError:
+                    if stop_event.is_set():
+                        break
+                    raise
                 conn.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
                 session = hub.new_session(conn, addr)
                 threading.Thread(target=client_worker, args=(hub, session), daemon=True).start()
         except KeyboardInterrupt:
             logging.info("KeyboardInterrupt → shutting down")
+            stop_event.set()
         finally:
             hub.shutdown()
 
